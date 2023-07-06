@@ -182,6 +182,3 @@ VALUES(20009, 3, 'BNBG03', 250, 2.49);
 
 select *
 from OrderItems;
-
-
-
