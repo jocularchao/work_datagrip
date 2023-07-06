@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$USER_HOME$/Desktop/linlin/OnlineShop/db_online_shop.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/../../open_source/xiaoyuanboke/xiaoyuanboke-main/xiaoyuanboke.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/01CreateDatabase.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/../study_sql/01Sams Teach Yourself SQL/01demo.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/../study_sql/01Sams Teach Yourself SQL/03order.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/../ylxt/01create_database.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/../ylxt/02mybatis_user.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/../ylxt/03create_hmis.sql" dialect="MySQL" />
+  </component>
+</project>
