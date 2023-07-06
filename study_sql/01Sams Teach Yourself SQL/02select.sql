@@ -29,7 +29,7 @@ select `prod_desc` from products limit 5 ;
 # 从第五行开始的五行数据   第5行~第8行
 select `prod_desc` from products limit 5 offset 5;
 # 简化 limit[offset , limit]
-select `prod_desc` from products limit 5,2;
+select `prod_desc` from products limit 5,5;
 /*
 "18 inch teddy bear, comes with cap and jacket"
 18 inch Raggedy Ann doll
