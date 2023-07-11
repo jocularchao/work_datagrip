@@ -12,3 +12,22 @@ from vendors,products
 order by vend_name,prod_name;
 
 
+-- 左连接 右连接  内连接
+-- 内连接 等值联结  基于两表之间相等部分的联结
+select vend_name,prod_name,prod_price       -- 与第一条有联结条件的语句相同
+from vendors inner join products p on vendors.vend_id = p.vend_id;
+
+--
+
+
+-- union  直接连接两个查询  包含在select语句之间 有自动去重
+select vend_id,prod_id,prod_price
+from products
+where prod_price<=5
+union
+select vend_id,prod_id,prod_price
+from products
+where vend_id in (1001,1002);
+
+
+--
