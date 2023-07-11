@@ -30,4 +30,3 @@ from products
 where vend_id in (1001,1002);
 
 
---
