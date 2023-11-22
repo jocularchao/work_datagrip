@@ -4,6 +4,12 @@ create database mysql_basis;
 -- 删除数据库
 drop database mysql_basis;
 
+-- 查看数据库
+show databases ;
+
+-- 返回建库语句
+show create database mysql_basis;
+
 -- 创建时设定编码格式
 create database if not exists mysql_basis default char set utf8mb4 collate utf8mb4_general_ci;
 
