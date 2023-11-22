@@ -19,7 +19,6 @@ create table test(
     primary key (`id`),         -- 创建主键
     key `key_id` (`id`),        -- 创建外键key_id
     constraint `key_id` foreign key (`id`) references `test` (`id`) -- 给这个外键添加约束即连接其他表 （执行引用） references 引用  这里没有其他表就连自己了
-
 );
 
 -- 配置编码值、自增情况、数据表类型
@@ -28,7 +27,6 @@ create table test(
     create_time datetime not null , -- 非空
     update_time datetime not null default '2023-12-1', -- 设置默认值
     primary key (`id`)
-
 )engine=innodb auto_increment=2 default charset=utf8mb4;
 
 
