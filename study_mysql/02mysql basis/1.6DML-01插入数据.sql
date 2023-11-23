@@ -7,7 +7,7 @@ insert into test values (1,'2023-09-30 12:30:00','2023-09-30 12:30:00');
 select *
 from test;
 
--- 向指定列插入数据
+-- 向一行的指定列插入数据
 insert into test(id, create_time) values (2,'2023-10-30 12:30:00');
 
 -- 一次性向数据库中插入多条数据
