@@ -23,11 +23,11 @@ create table test(
 
 -- 配置编码值、自增情况、数据表类型
 create table test(
-    id int unsigned,         -- 不能为负数
+    id int unsigned auto_increment,         -- 不能为负数
     create_time datetime not null , -- 非空
     update_time datetime not null default '2023-12-1', -- 设置默认值
     primary key (`id`)
-)engine=innodb auto_increment=2 default charset=utf8mb4;
+)engine=innodb default charset=utf8mb4;
 
 
 -- 查看库内的表
