@@ -8,6 +8,7 @@ select *
 from test;
 
 -- 向一行的指定列插入数据
+-- 一般写插入语句，我们一定要一一对应
 insert into test(id, create_time) values (2,'2023-10-30 12:30:00');
 
 -- 一次性向数据库中插入多条数据
