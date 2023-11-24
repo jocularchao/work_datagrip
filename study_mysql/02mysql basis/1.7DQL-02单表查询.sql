@@ -36,11 +36,21 @@ from t_user;
 -- where子句 运算符 id等于 大于 某个值，在某个区间内修改。。。
 -- 操作符会返回 布尔值
 /*
-    一般的比较运算符，包括=、>、<、>=、<=、!=等。
+    一般的比较运算符：包括=、>、<、>=、<=、!=等。
     是否在集合中：in、not in
-    字符模糊匹配：like，not like
+        in(11,22,33)
+        in('北京')
+
+    字符模糊匹配：
+        like或not like:
+            % 代表0到任意个字符
+            _一个字
+            __只有两个字
+            %1%中间有1的行
+        between and  从。。到。。闭合区间
+        查询字段为空的行 null ''        where id ='' or id is null   where id ='' or id is not null
     多重条件连接查询：
-     between and  从。。到。。闭合区间
+
      and     &&
      or      ||
      not     !
