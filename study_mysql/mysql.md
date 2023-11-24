@@ -761,6 +761,14 @@ truncate test;
 
 insert into test (create_time)
 values ('2000-10-12 12:00:00');
+
+-- truncate删除数据,自增当前值会恢复到初始值重新开始;不会记录日志.
+
+
+-- 同样使用DELETE清空不同引擎的数据库表数据.重启数据库服务后
+-- InnoDB : 自增列从初始值重新开始 (因为是存储在内存中,断电即失)
+-- MyISAM : 自增列依然从上一个自增数据基础上开始 (存在文件中,不会丢失)
+
 ```
 
 ![image-20231123181944764](./mysql/image-20231123181944764.png)
@@ -775,11 +783,44 @@ values ('2000-10-12 12:00:00');
 
 ### 1.7 DQL
 
-数据库查询
+数据库查询   select  
 
-select  
+#### 1.7.1 select语法
+
+```mysql
+SELECT [ALL | DISTINCT]
+{* | table.* | [table.field1[as alias1][,table.field2[as alias2]][,...]]}
+FROM table_name [as table_alias]
+[left | right | inner join table_name2] -- 联合查询
+[WHERE ...] -- 指定结果需满足的条件
+[GROUP BY ...] -- 指定结果按照哪几个字段来分组
+[HAVING] -- 过滤分组的记录必须满足的次要条件
+[ORDER BY ...] -- 指定查询记录按一个或多个条件排序
+[LIMIT {[offset,]row_count | row_countOFFSET offset}];
+-- 指定查询的记录从哪条至哪条
+```
+
+> [ ] 括号代表可选的 , { }括号代表必选得
 
 
+
+#### 1.7.2 查询系统信息
+
+
+
+
+
+#### 1.7.3 单表查询
+
+*-- 指定查询某一列数据* 
+
+`select 列名[,列名] from 表名 `
+
+*-- 查询所有的列数据* 
+
+`select * from 表名` 
+
+##### where 限定查询条件
 
 
 
@@ -789,13 +830,19 @@ select
 
 数据库管理控制
 
-
+主要是用户权限
 
 #### 1.8.1 user
 
-主要是用户操作  https://dev.mysql.com/doc/refman/8.2/en/user-names.html
+  https://dev.mysql.com/doc/refman/8.2/en/user-names.html
 
 庞大的数据库不可能由一个人来管理，我们需要更多的用户来一起管理整个数据库。
+
+##### 用户信息表
+
+`mysql.user`
+
+
 
 ##### 创建用户
 
