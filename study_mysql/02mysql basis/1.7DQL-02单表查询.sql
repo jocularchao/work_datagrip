@@ -5,7 +5,7 @@ use mysql_basis;
 drop table if exists `t_user`;
 
 create table if not exists `t_user`  (
-  `id` bigint(20) not null  comment '用户id',
+  `id` bigint(20) not null auto_increment,
   `user_uuid` varchar(128)  not null comment '用户编号',
   `user_name` varchar(32)  null comment '用户名',
   `password` varchar(255)  null comment '密码',
