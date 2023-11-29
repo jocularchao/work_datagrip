@@ -55,7 +55,7 @@ grant all on *.* to jocualrchao with grant option;
 
 -- 我们可以使用revoke来收回一个权限：
 -- revoke all|权限1,权限2...(列1,...) on 数据库.表 from 用户
-revoke all on *.* from jocualrchao;
+revoke all privileges on *.* from jocualrchao;
 
 -- 登录策略
 -- 通过@来限制用户登录的登录IP地址，%表示匹配所有的IP地址，默认使用的就是任意IP地址
