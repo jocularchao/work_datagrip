@@ -24,3 +24,9 @@ select `device_id`,`gender`,`age`,`university` from `user_profile` where `univer
 
 select `device_id`,`gender`,`age`,`university` from `user_profile` where age is not null ;
 
+-- 计算男生人数以及平均GPA
+# 表头重命名，用as语法
+# 浮点数的平均值可能小数点位数很多，按照示例保存一位小数，用round函数
+-- select count(`gender`) as male_num, round(avg(`gpa`),1) as avg_gpa from user_profile where gender= 'male';
+
+--
