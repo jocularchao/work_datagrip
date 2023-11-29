@@ -806,7 +806,10 @@ FROM table_name [as table_alias]
 
 #### 1.7.2 查询系统信息
 
-
+```mysql
+-- 查看系统版本
+select version();
+```
 
 
 
@@ -820,9 +823,168 @@ FROM table_name [as table_alias]
 
 `select * from 表名` 
 
-##### where 限定查询条件
+```mysql
+drop table if exists `t_user`;
+
+create table if not exists `t_user`  (
+  `id` bigint(20) not null  comment '用户id',
+  `user_uuid` varchar(128)  not null comment '用户编号',
+  `user_name` varchar(32)  null comment '用户名',
+  `password` varchar(255)  null comment '密码',
+  `nickname` varchar(32)  null comment '昵称',
+  `email` varchar(255)  null comment '邮箱',
+  `status` int null comment '1.启用 2.禁用',
+  `image_path` varchar(255)  null comment '头像地址',
+  `create_time` datetime null comment '创建时间',
+  `modify_time` datetime null comment '修改时间',
+  `last_active_time` datetime null comment '最近登录时间',
+  `is_delete` bit(1) null comment '是否删除',
+  primary key (`id`),
+  unique key `Key_mail` (`email`)
+) engine = innodb  default charset utf8mb4;
+
+insert into t_user (id, user_uuid, user_name, password, nickname, email, status, image_path, create_time, modify_time,
+                    last_active_time, is_delete)
+values (1,'20231101','username1','123456','u1','u1@user.com',1,'test','2023-11-01 12:00:00','2023-11-02 12:00:00',null,b'0'),
+       (2,'20231102','username2','123456','u2','u2@user.com',1,'test','2023-11-01 12:00:00','2023-11-02 12:00:00',null,b'0'),
+       (3,'20231103','username3','123456','u3','u3@user.com',1,'test','2023-11-01 12:00:00','2023-11-02 12:00:00',null,b'0'),
+       (4,'20231104','username4','123456','u4','u4@user.com',1,'test','2023-11-01 12:00:00','2023-11-02 12:00:00',null,b'0'),
+       (5,'20231105','username5','123456','u5','u5@user.com',1,'test','2023-11-01 12:00:00','2023-11-02 12:00:00',null,b'0');
+
+-- 查询所有信息
+select *
+from t_user;
+
+-- where子句 运算符 id等于 大于 某个值，在某个区间内修改。。。
+-- 操作符会返回 布尔值
+/*
+    一般的比较运算符：包括=、>、<、>=、<=、!=等。
+    是否在集合中：in、not in
+        in(11,22,33)
+        in('北京')
+
+    字符模糊匹配：
+        like或not like:
+            % 代表0到任意个字符
+            _一个字
+            __只有两个字
+            %1%中间有1的行
+        between and  从。。到。。闭合区间
+        查询字段为空的行 null ''        where id ='' or id is null   where id ='' or id is not null
+    多重条件连接查询：
+
+     and     &&
+     or      ||
+     not     !
+ */
 
 
+-- 查询指定字段
+select id, user_name from t_user where id>1;
+
+-- 别名
+select id,user_name as 用户名 from t_user where id>2;
+
+-- 去除select查询出来的结果重复的数据，只显示一条
+select distinct id,user_name from t_user;
+
+-- 用来计算
+select 1+100 as 加;
+
+-- 设置自增步长
+set @auto_increment = 1;
+
+-- 查询自增的步长
+select @auto_increment;
+
+
+-- 数据库中的表达式：文本值，列，函数，计算表达式，系统变量
+-- select 表达式
+```
+
+
+
+#### 1.7.4 排序查询
+
+```mysql
+/*============== 排序 ================
+语法 : ORDER BY
+ORDER BY 语句用于根据指定的列对结果集进行排序。
+ORDER BY 语句默认按照ASC升序对记录进行排序。
+如果您希望按照降序对记录进行排序，可以使用 DESC 关键字。
+*/
+
+select * from mysql_basis.t_user order by id desc ;
+
+-- 同时添加多个排序，给多个列排序，按顺序进行
+select * from t_user order by id ,status desc ;
+```
+
+
+
+#### 1.7.5 多表查询
+
+
+
+
+
+
+
+
+
+#### 1.7.6 连接查询
+
+
+
+##### 自连接
+
+
+
+
+
+##### 外连接
+
+专门用于联合查询情景
+
+- inner join 内连接，只会返回两个表满足条件的交集部分：
+
+![image-20231128180023834](./mysql/image-20231128180023834.png)
+
+- left join 左连接，返回交集部分以及左边表的全部数据，而右表缺失的部分用null代替
+
+![image-20231128180208585](./mysql/image-20231128180208585.png)
+
+- right join 右连接 与左连接对应
+
+
+
+###### 内连接
+
+
+
+
+
+###### 左连接
+
+
+
+
+
+###### 右连接
+
+
+
+
+
+
+
+#### 1.7.7 嵌套查询
+
+
+
+
+
+#### 1.7.8 分组、分页
 
 
 
@@ -898,6 +1060,64 @@ revoke all|权限1,权限2...(列1,...) on 数据库.表 from 用户
 
 
 
+#### 1.8.2 mysql备份
+
+数据库备份必要性 
+
+- 保证重要数据不丢失 
+- 数据转移 
+
+MySQL数据库备份方法 
+
+- mysqldump备份工具 
+- 数据库管理工具,如datagrip 
+- 直接拷贝数据库文件和相关配置文件
+
+##### 导出
+
+###### mysqldump命令
+
+进入mysql的bin目录下，cmd管理员模式打开
+
+![image-20231129124422325](./mysql/image-20231129124422325.png)
+
+```bash
+-- 导出
+1. 导出一张表 -- mysqldump -uroot -p123456 school student >D:/a.sql
+mysqldump -u用户名 -p密码 库名 表名 > 文件名(D:/a.sql)
+2. 导出多张表 -- mysqldump -uroot -p123456 school student result >D:/a.sql
+mysqldump -u用户名 -p密码 库名 表1 表2 表3 > 文件名(D:/a.sql)
+3. 导出所有表 -- mysqldump -uroot -p123456 school >D:/a.sql
+mysqldump -u用户名 -p密码 库名 > 文件名(D:/a.sql)
+4. 导出一个库 -- mysqldump -uroot -p123456 -B school >D:/a.sql
+mysqldump -u用户名 -p密码 -B 库名 > 文件名(D:/a.sql)
+可以-w携带备份条件
+```
+
+
+
+
+
+
+
+###### datagrip导出
+
+
+
+
+
+##### 导入
+
+```bash
+-- 导入
+1. 在登录mysql的情况下： -- source D:/a.sql
+source 备份文件
+2. 在不登录的情况下
+mysql -u用户名 -p密码 库名 < 备份文件
+```
+
+
+
 
 
 ### 1.9 视图
@@ -934,9 +1154,71 @@ drop view apptest
 
 ### 1.10索引
 
+索引可以
+
+- 提高查询速度 
+- 确保数据的唯一性 
+- 可以加速表和表之间的连接 , 实现表与表之间的参照完整性 
+- 使用分组和排序子句进行数据检索时 , 可以显著减少分组和排序的时间 
+- 全文检索字段进行搜索优化
+
+索引分为：
+
+- 主键索引 (Primary Key) 
+- 唯一索引 (Unique) 
+- 常规索引 (Index) 
+- 全文索引 (FullText)
+
+
+
+#### 1.10.1 主键索引
+
+主键 : 某一个属性组能唯一标识一条记录
+
+特点 : 
+
+- 最常见的索引类型 
+- 确保数据记录的唯一性 
+- 确定特定数据记录在数据库中的位置
+
+
+
+#### 1.10.2 唯一索引
+
+作用 : 避免同一个表中某数据列中的值重复 
+
+与主键索引的区别 
+
+- 主键索引只能有一个 
+- 唯一索引可能有多个
+
+
+
+
+
+#### 1.10.3 常规索引
+
+
+
+
+
+#### 1.10.4 全文索引
+
+
+
+#### 1.10.5 索引准则
+
+
+
+#### 1.10.6 索引的数据结构
+
+
+
 
 
 ### 1.11 触发器
+
+
 
 
 
@@ -944,13 +1226,36 @@ drop view apptest
 
 
 
+
+
 ### 1.13 函数
+
+
+
+
+
+#### 1.13. 聚合函数
+
+聚集函数一般用作统计，包括：
+
+- `count([distinct]*)`统计所有的行数（distinct表示去重再统计，下同）
+- `count([distinct]列名)`统计某列的值总和
+- `sum([distinct]列名)`求一列的和（注意必须是数字类型的）
+- `avg([distinct]列名)`求一列的平均值（注意必须是数字类型）
+- `max([distinct]列名)`求一列的最大值
+- `min([distinct]列名)`求一列的最小值
+
+
+
+
 
 
 
 ### 1.14 存储过程
 
 
+
+#### 
 
 
 
@@ -1183,42 +1488,42 @@ MySQL 8.2 授权表是 [`InnoDB`](https://dev.mysql.com/doc/refman/8.2/en/innodb
 
 表 6.2 GRANT 和 REVOKE 允许的静态权限
 
-| 特权                                                         | 授予表列                 | 语境                   |
-| :----------------------------------------------------------- | :----------------------- | :--------------------- |
-| [`ALL [PRIVILEGES\]`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_all) | “所有特权”的同义词       | 服务器管理             |
-| [`ALTER`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_alter) | `Alter_priv`             | 表格                   |
-| [`ALTER ROUTINE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_alter-routine) | `Alter_routine_priv`     | 存储的例程             |
-| [`CREATE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create) | `Create_priv`            | 数据库、表或索引       |
-| [`CREATE ROLE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-role) | `Create_role_priv`       | 服务器管理             |
-| [`CREATE ROUTINE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-routine) | `Create_routine_priv`    | 存储的例程             |
-| [`CREATE TABLESPACE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-tablespace) | `Create_tablespace_priv` | 服务器管理             |
-| [`CREATE TEMPORARY TABLES`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-temporary-tables) | `Create_tmp_table_priv`  | 表格                   |
-| [`CREATE USER`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-user) | `Create_user_priv`       | 服务器管理             |
-| [`CREATE VIEW`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-view) | `Create_view_priv`       | 意见                   |
-| [`DELETE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_delete) | `Delete_priv`            | 表格                   |
-| [`DROP`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_drop) | `Drop_priv`              | 数据库、表或视图       |
-| [`DROP ROLE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_drop-role) | `Drop_role_priv`         | 服务器管理             |
-| [`EVENT`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_event) | `Event_priv`             | 数据库                 |
-| [`EXECUTE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_execute) | `Execute_priv`           | 存储的例程             |
-| [`FILE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_file) | `File_priv`              | 服务器主机上的文件访问 |
-| [`GRANT OPTION`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_grant-option) | `Grant_priv`             | 数据库、表或存储例程   |
-| [`INDEX`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_index) | `Index_priv`             | 表格                   |
-| [`INSERT`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_insert) | `Insert_priv`            | 表或列                 |
-| [`LOCK TABLES`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_lock-tables) | `Lock_tables_priv`       | 数据库                 |
-| [`PROCESS`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_process) | `Process_priv`           | 服务器管理             |
-| [`PROXY`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_proxy) | 见表`proxies_priv`_      | 服务器管理             |
-| [`REFERENCES`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_references) | `References_priv`        | 数据库或表             |
-| [`RELOAD`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_reload) | `Reload_priv`            | 服务器管理             |
-| [`REPLICATION CLIENT`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_replication-client) | `Repl_client_priv`       | 服务器管理             |
-| [`REPLICATION SLAVE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_replication-slave) | `Repl_slave_priv`        | 服务器管理             |
-| [`SELECT`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_select) | `Select_priv`            | 表或列                 |
-| [`SHOW DATABASES`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_show-databases) | `Show_db_priv`           | 服务器管理             |
-| [`SHOW VIEW`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_show-view) | `Show_view_priv`         | 意见                   |
-| [`SHUTDOWN`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_shutdown) | `Shutdown_priv`          | 服务器管理             |
-| [`SUPER`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_super) | `Super_priv`             | 服务器管理             |
-| [`TRIGGER`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_trigger) | `Trigger_priv`           | 表格                   |
-| [`UPDATE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_update) | `Update_priv`            | 表或列                 |
-| [`USAGE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_usage) | “没有特权”的同义词       | 服务器管理             |
+| 特权                                                         | 授予表列                 | 语境                   | 用处                                                         |
+| :----------------------------------------------------------- | :----------------------- | :--------------------- | ------------------------------------------------------------ |
+| [`ALL PRIVILEGES\`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_all) | “所有特权”的同义词       | 服务器管理             | 设置除grant option之外的所有简单权限                         |
+| [`ALTER`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_alter) | `Alter_priv`             | 表格                   | 允许使用 alter table **修改表**                              |
+| [`ALTER ROUTINE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_alter-routine) | `Alter_routine_priv`     | 存储的例程             | 更改或取消已存储的子程序                                     |
+| [`CREATE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create) | `Create_priv`            | 数据库、表或索引       | 允许使用create table **创建表**                              |
+| [`CREATE ROLE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-role) | `Create_role_priv`       | 服务器管理             |                                                              |
+| [`CREATE ROUTINE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-routine) | `Create_routine_priv`    | 存储的例程             | 创建已存储的子程序                                           |
+| [`CREATE TABLESPACE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-tablespace) | `Create_tablespace_priv` | 服务器管理             |                                                              |
+| [`CREATE TEMPORARY TABLES`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-temporary-tables) | `Create_tmp_table_priv`  | 表格                   | 允许使用create temporary table                               |
+| [`CREATE USER`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-user) | `Create_user_priv`       | 服务器管理             | 允许使用CREATE USER, DROP USER, RENAME USER和REVOKE ALL PRIVILEGES。**用户操作** |
+| [`CREATE VIEW`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_create-view) | `Create_view_priv`       | 意见                   | 允许使用 create view                                         |
+| [`DELETE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_delete) | `Delete_priv`            | 表格                   | 允许使用 delete                                              |
+| [`DROP`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_drop) | `Drop_priv`              | 数据库、表或视图       | 允许使用 drop table                                          |
+| [`DROP ROLE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_drop-role) | `Drop_role_priv`         | 服务器管理             | 允许使用                                                     |
+| [`EVENT`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_event) | `Event_priv`             | 数据库                 | 允许使用                                                     |
+| [`EXECUTE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_execute) | `Execute_priv`           | 存储的例程             | 允许 用户运行已存储的子程序                                  |
+| [`FILE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_file) | `File_priv`              | 服务器主机上的文件访问 | 允许使用 select ... into outfile 、load data infile          |
+| [`GRANT OPTION`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_grant-option) | `Grant_priv`             | 数据库、表或存储例程   | 允许使用                                                     |
+| [`INDEX`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_index) | `Index_priv`             | 表格                   | 允许使用 create index 、drop index                           |
+| [`INSERT`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_insert) | `Insert_priv`            | 表或列                 | 允许使用 insert                                              |
+| [`LOCK TABLES`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_lock-tables) | `Lock_tables_priv`       | 数据库                 | 允许 对您拥有的select权限的表使用 lock tables                |
+| [`PROCESS`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_process) | `Process_priv`           | 服务器管理             | 允许使用 show full processlist                               |
+| [`PROXY`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_proxy) | 见表`proxies_priv`_      | 服务器管理             | 允许使用                                                     |
+| [`REFERENCES`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_references) | `References_priv`        | 数据库或表             | 未被实施                                                     |
+| [`RELOAD`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_reload) | `Reload_priv`            | 服务器管理             | 允许使用 flush                                               |
+| [`REPLICATION CLIENT`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_replication-client) | `Repl_client_priv`       | 服务器管理             | 允许用户询问从属服务器或主服务器的地址                       |
+| [`REPLICATION SLAVE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_replication-slave) | `Repl_slave_priv`        | 服务器管理             | 用于复制型从属服务器（从主服务器中读取二进制日志事件）       |
+| [`SELECT`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_select) | `Select_priv`            | 表或列                 | 允许使用 select                                              |
+| [`SHOW DATABASES`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_show-databases) | `Show_db_priv`           | 服务器管理             | 允许使用 show databases **显示所有数据库**                   |
+| [`SHOW VIEW`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_show-view) | `Show_view_priv`         | 意见                   | 允许使用 show、create view                                   |
+| [`SHUTDOWN`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_shutdown) | `Shutdown_priv`          | 服务器管理             | 允许使用mysqladmin shutdown                                  |
+| [`SUPER`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_super) | `Super_priv`             | 服务器管理             | 允许使用change master， kill， purge master logs，set global，mysqladmin debug命令：允许连接一次，即使已达到最大连接值 |
+| [`TRIGGER`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_trigger) | `Trigger_priv`           | 表格                   | 允许使用                                                     |
+| [`UPDATE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_update) | `Update_priv`            | 表或列                 | 允许使用update                                               |
+| [`USAGE`](https://dev.mysql.com/doc/refman/8.2/en/privileges-provided.html#priv_usage) | “没有特权”的同义词       | 服务器管理             | 允许使用无权限的同义词                                       |
 
 
 
@@ -1280,6 +1585,8 @@ MySQL 8.2 授权表是 [`InnoDB`](https://dev.mysql.com/doc/refman/8.2/en/innodb
 
 
 ### 98.2 编码
+
+
 
 
 
