@@ -186,11 +186,17 @@ where (university,gpa) in
       (select university,min(gpa) from user_profile group by university)
 order by university;
 
-
+-- 统计复旦用户8月练题情况
 select up.device_id,up.university,sum(if(month(date)=8,1,0)) question_cnt,sum(if(month(date)=8 and result='right',1,0)) right_question_cnt from user_profile up
 left join question_practice_detail qpd on up.device_id = qpd.device_id
 where university = '复旦大学'
 group by up.device_id;
 
-
+-- 不同难度题目的正确率
+select difficult_level,round(sum(if(result='right',1,0))/count(qpd.question_id),4) correct_rate from question_practice_detail qpd
+left join user_profile up on qpd.device_id = up.device_id
+inner join question_detail qd on qpd.question_id = qd.question_id
+where up.university = '浙江大学'
+group by difficult_level
+order by correct_rate;
 
